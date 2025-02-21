@@ -3,6 +3,10 @@ import User from '../models/user';
 import { generateToken } from '../utils/generateToken';
 import Product from '../models/product';
 import AuthRequest from '../middleware/auth.middleware';
+import { generateThumbnail } from '../utils/ffmpeg';
+import path from 'path';
+import fs from 'fs';
+import { upload } from '../utils/multer';
 
 export const register = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -154,3 +158,43 @@ export const deleteProduct = async (req: AuthRequest, res: Response) => {
   }
 };
 
+// Upload Media
+export const uploadMedia = async (req: Request, res: Response) => {
+  upload.single('file')(req, res, async (err) => {
+    if (err) return res.status(400).json({ message: err.message });
+
+    try {
+      if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+      const filePath = req.file.path;
+      
+      const fileType = req.file.mimetype;
+
+      // For video files, generate a thumbnail
+      if (fileType.startsWith('video/')) {
+        const thumbnailName = `${path.parse(req.file.filename).name}-thumbnail.png`;
+        const thumbnailPath = path.join('src/uploads', 'thumbnails', thumbnailName);
+
+        // Ensure the thumbnails directory exists
+        fs.mkdirSync(path.dirname(thumbnailPath), { recursive: true });
+
+        await generateThumbnail(filePath, thumbnailPath);
+
+        return res.status(200).json({
+          message: 'Video uploaded with thumbnail generated',
+          videoPath: filePath,
+          thumbnailPath,
+        });
+      }
+
+      // For image uploads
+      res.status(200).json({
+        message: 'Image uploaded successfully',
+        imagePath: filePath,
+      });
+    } catch (error) {
+      console.error('Upload Error:', error);
+      res.status(500).json({ message: 'File upload failed', error });
+    }
+  });
+};
