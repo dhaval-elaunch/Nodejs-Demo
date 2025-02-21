@@ -1,3 +1,37 @@
+// # Initialize npm
+// npm init -y
+
+// # Install dependencies
+// npm install express mongoose bcryptjs jsonwebtoken dotenv
+
+// # Install TypeScript & types
+// npm install -D typescript @types/express @types/node @types/bcryptjs @types/jsonwebtoken ts-node nodemon
+
+// # Initialize TypeScript config
+// npx tsc --init
+
+// jwt-auth-ts/
+// ├── src/
+// │   ├── config/
+// │   │   └── db.ts
+// │   ├── controllers/
+// │   │   └── authController.ts
+// │   ├── middlewares/
+// │   │   └── authMiddleware.ts
+// │   ├── models/
+// │   │   └── User.ts
+// │   ├── routes/
+// │   │   └── authRoutes.ts
+// │   ├── utils/
+// │   │   └── generateToken.ts
+// │   ├── app.ts
+// │   └── server.ts
+// ├── .env
+// ├── .gitignore
+// ├── package.json
+// ├── tsconfig.json
+// └── README.md
+
 import { Request, Response } from 'express';
 import User from '../models/user';
 import { generateToken } from '../utils/generateToken';
