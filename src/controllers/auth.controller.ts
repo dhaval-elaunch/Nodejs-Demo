@@ -62,7 +62,6 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// 👑 Admin Registration (only for testing — secure this in production)
 export const registerAdmin = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
