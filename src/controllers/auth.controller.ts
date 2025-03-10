@@ -32,6 +32,10 @@
 // ├── tsconfig.json
 // └── README.md
 
+// http://localhost:5001/api/auth/register?env=test
+// http://localhost:5001/api/products/createProduct
+// http://localhost:5001/api/auth/uploadMedia?env=test
+
 
 import { Request, Response } from 'express';
 import User from '../models/user';
